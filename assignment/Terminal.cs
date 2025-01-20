@@ -21,9 +21,9 @@ namespace assignment
         }
         public bool AddAirline(Airline airline)
         {
-            if (AirLines.ContainsKey(airline.Code))
+            if (Airlines.ContainsKey(airline.Code))
             {
-                Airlines[airline.code] = airline;
+                Airlines[airline.Code] = airline;
                 return true;
             }
             return false;

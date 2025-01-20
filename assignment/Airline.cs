@@ -20,9 +20,9 @@ namespace assignment
         }
         public bool AddFlight(Flight flight)
         {
-            if (Flight.ContainsKey(flight.FlightNumer))
+            if (Flights.ContainsKey(flight.FlightNumber))
             {
-                Flights[flight.FlightNumer] = flight;
+                Flights[flight.FlightNumber] = flight;
                 return true;
             }
             return false;
@@ -38,9 +38,9 @@ namespace assignment
         }
         public bool RemoveFlight(Flight flight)
         {
-            if (Flight.ContainsKey(flight.FlightNumer))
+            if (Flights.ContainsKey(flight.FlightNumber))
             {
-                Flights.Remove(flight.FlightNumer);
+                Flights.Remove(flight.FlightNumber);
                 return true;
             }
             return false;
