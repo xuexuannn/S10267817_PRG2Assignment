@@ -22,13 +22,13 @@ foreach (var airline in airlineDict.Values)
 }
 
 Dictionary<string, BoardingGate> boardingGateDict = new Dictionary<string, BoardingGate>();
-using(StreamReader sr = new StreamReader("boardinggates.csv"))
+using (StreamReader sr = new StreamReader("boardinggates.csv"))
 {
-    string?s =sr.ReadLine();
-    while ((s=sr.ReadLine()) != null)
+    string? s = sr.ReadLine();
+    while ((s = sr.ReadLine()) != null)
     {
         string[] boardgateinfo = s.Split(',');
-        string gate= boardgateinfo[0].Trim();
+        string gate = boardgateinfo[0].Trim();
         bool ddjb = bool.Parse(boardgateinfo[1].Trim());
         bool cfft = bool.Parse(boardgateinfo[2].Trim());
         bool lwtt = bool.Parse(boardgateinfo[3].Trim());
@@ -62,9 +62,9 @@ void MainMenu()
 
 //Feature 2
 Dictionary<string,Flight> flightDict =new Dictionary<string,Flight>();
-using (StreamReader sr = new StreamReader("Flight.csv"))
+using (StreamReader sr = new StreamReader("flights.csv"))
 {
-    string s = sr.ReadLine();//header
+    string s = sr.ReadLine();       //header
     while ((s=sr.ReadLine()) != null)
     {
         string[] parts = s.Split(',');
@@ -94,7 +94,7 @@ using (StreamReader sr = new StreamReader("Flight.csv"))
         }
         else
         {
-            flight =new Flight(flightNumber,origin,destination,expectedTime);
+            flight =new NORMFlight(flightNumber,origin,destination,expectedTime);
         }
         if (flightDict.ContainsKey(flightNumber))
         {
@@ -112,20 +112,20 @@ void DisplayFlight()
     Console.WriteLine("=============================================");
     Console.WriteLine("List of Flights for Changi Airport Terminal 5");
     Console.WriteLine("=============================================");
-    Console.WriteLine($"{"Flight Number",16}{"Airline Name",24}{"Origin",24}{"Destination",24}{"Expected Departure/Arrival Time"}");
+    Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-24}{"Origin",-24}{"Destination",-24}{"Expected Departure/Arrival Time"}");
     foreach (KeyValuePair <string,Flight> kvp in flightDict)
     {
         string airlinecode = kvp.Value.FlightNumber.Substring(0, 2);    //get the first two letters
         string airlineName = "";
-        foreach (KeyValuePair<string,Airline> kvp in airlineDict)
+        foreach (KeyValuePair<string,Airline> i in airlineDict)
         {
-            if (kvp.Key == airlinecode)
+            if (i.Key == airlinecode)
             {
-                airlineName = kvp.Value.Name;
+                airlineName = i.Value.Name;
                 break;
             }
         }
-        Console.WriteLine($"{kvp.Value.FlightNumber,16}{airlineName,24}{kvp.Value.Origin,24}{kvp.Value.Destination,24}{kvp.Value.ExpectedTime}");
+        Console.WriteLine($"{kvp.Value.FlightNumber,-16}{airlineName,-24}{kvp.Value.Origin,-24}{kvp.Value.Destination,-24}{kvp.Value.ExpectedTime}");
     }
 }
 

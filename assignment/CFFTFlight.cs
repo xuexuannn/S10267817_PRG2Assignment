@@ -9,8 +9,7 @@ namespace assignment
     class CFFTFlight : Flight
     {
         public double RequestFee { get; set; } = 150;
-        public CFFTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status, double requestfee) : base(flightNumber, origin, destination, expectedTime, status)
-        { RequestFee = requestfee; }
+        public CFFTFlight(string flightNumber, string origin, string destination, DateTime expectedTime) : base(flightNumber, origin, destination, expectedTime) { }
         public override double CalculateFees()
         {
             if (Origin == "Singapore (SIN)")

@@ -8,8 +8,7 @@ namespace assignment
 {
     class LWTTFlight : Flight
     {
-        public LWTTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status, double requestfee) : base(flightNumber, origin, destination, expectedTime, status)
-        { RequestFee = requestfee; }
+        public LWTTFlight(string flightNumber, string origin, string destination, DateTime expectedTime) : base(flightNumber, origin, destination, expectedTime) { }
         public double RequestFee { get; set; } = 500;
 
         public override double CalculateFees()
