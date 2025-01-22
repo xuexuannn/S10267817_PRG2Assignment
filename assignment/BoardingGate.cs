@@ -15,11 +15,11 @@ namespace assignment
         public bool SupportsLWTT { get; set; }
         public Flight Flight { get; set; }
         public BoardingGate() { }
-        public BoardingGate(string name, bool cfft, bool ddjb, bool lwtt, Flight flight)
+        public BoardingGate(string name, bool ddjb, bool cfft, bool lwtt, Flight flight)
         {
             GateName = name;
-            SupportsCFFT = cfft;
             SupportsDDJB = ddjb;
+            SupportsCFFT = cfft;
             SupportsLWTT = lwtt;
             Flight = flight;
         }
@@ -42,7 +42,7 @@ namespace assignment
         }
         public override string ToString()
         {
-            return $"";
+            return $"Gate Name: {GateName}, SupportsCFFT: {SupportsCFFT}, SupportsDDJB: {SupportsDDJB}, SupportLWTT: {SupportsLWTT}, Flight: {Flight}";
         }
     }
 }

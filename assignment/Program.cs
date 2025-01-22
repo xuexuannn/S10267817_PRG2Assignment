@@ -1,4 +1,5 @@
 ﻿using assignment;
+using System.Runtime.ExceptionServices;
 
 Dictionary<string, Airline> airlineDict= new Dictionary<string, Airline>();
 //load airline.csv
@@ -14,11 +15,6 @@ using (StreamReader sr = new StreamReader("airlines.csv"))
         Airline airline = new Airline(airlineName, airlineCode);
         airlineDict[airlineCode] = airline;
     }
-}
-//display airline dict
-foreach (var airline in airlineDict.Values)
-{
-    Console.WriteLine(airline);
 }
 
 Dictionary<string, BoardingGate> boardingGateDict = new Dictionary<string, BoardingGate>();
@@ -38,11 +34,6 @@ using (StreamReader sr = new StreamReader("boardinggates.csv"))
     }
 
 }
-foreach (var boardingGate in boardingGateDict.Values)
-{
-    Console.WriteLine(boardingGate);
-}
-
 void MainMenu()
 {
     Console.WriteLine("=============================================");
@@ -105,6 +96,7 @@ using (StreamReader sr = new StreamReader("flights.csv"))
         }
     }
 }
+
 //Feature 3
 void DisplayFlight()
 {
@@ -136,8 +128,6 @@ void AssignBoardingGate()
 
     Console.WriteLine("Enter Flight Number:");
     string flightNumber = Console.ReadLine();
-    Console.WriteLine("Enter Boarding Gate Name:");
-    string boardingGate= Console.ReadLine();
     // Checking if flight exist
     if (!flightDict.ContainsKey(flightNumber))
     {
@@ -167,21 +157,30 @@ void AssignBoardingGate()
     {
         Console.WriteLine("LWTT");
     }
-    if (!boardingGateDict.ContainsKey(boardingGate))
+    string boardingGate;
+    BoardingGate selectedBoardingGate;
+    while (true)
     {
-        Console.WriteLine("Boarding Gate not found.");
-        return;
+        Console.WriteLine("Enter Boarding Gate Name:");
+        boardingGate = Console.ReadLine();
+        if (!boardingGateDict.ContainsKey(boardingGate))
+        {
+            Console.WriteLine("Boarding Gate not found.");
+            return;
+        }
+        selectedBoardingGate = boardingGateDict[boardingGate];
+        if (selectedBoardingGate.Flight != null)
+        {
+            Console.WriteLine($"Boarding Gate {selectedBoardingGate} is already assigned to Flight {selectedBoardingGate.Flight.FlightNumber}");
+            Console.WriteLine("Please choose a different Boarding Gate.");
+        }
+        else
+        {
+            break;
+        }
     }
-    BoardingGate selectedBoardingGate = boardingGateDict[boardingGate];
-    if (selectedBoardingGate.Flight != null)
-    {
-        Console.WriteLine($"Boarding Gate {selectedBoardingGate} is already assigned to Flight {selectedBoardingGate.Flight.FlightNumber}");
-        return;
-    }
-    else
-    {
-        selectedBoardingGate.Flight = selectedFlight;
-    }
+    selectedBoardingGate.Flight = selectedFlight;
+
     Console.WriteLine($"Support DDJB: {selectedBoardingGate.SupportsDDJB}");
     Console.WriteLine($"Support CFFT: {selectedBoardingGate.SupportsCFFT}");
     Console.WriteLine($"Support LWTT: {selectedBoardingGate.SupportsLWTT}");
@@ -192,7 +191,7 @@ void AssignBoardingGate()
         Console.WriteLine("1. Delayed");
         Console.WriteLine("2. Boarding");
         Console.WriteLine("3. On Time");
-        Console.Write("Please select the new status of the flight: ");
+        Console.WriteLine("Please select the new status of the flight: ");
         int option = Convert.ToInt32(Console.ReadLine());
         if (option == 1)
         {
@@ -217,3 +216,4 @@ void AssignBoardingGate()
     }
     Console.WriteLine($"Flight {selectedFlight.FlightNumber} has been assigned to Boarding Gate {selectedBoardingGate.GateName}!");
 }
+AssignBoardingGate();
