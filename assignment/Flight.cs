@@ -22,7 +22,28 @@ namespace assignment
             ExpectedTime = expectedTime;
             Status = "Scheduled";
         }
-        public abstract double CalculateFees();
+        public double CalculateFees()
+        {
+            if (Destination== "Singapore (SIN)")
+            {
+                double fees = 800;
+                if (Origin == "Dubai(DXB)" | Origin == "Bangkok (BKK)" | Origin == "Tokyo (NRT)")
+                {
+                    double discount = 25 + 50; 
+                    fees = fees - discount;
+                    return fees;
+                }
+                return fees;
+            }
+            else if (Origin=="Singapore (SIN)")
+            {
+                double fees = 1100-50;
+                return fees;
+            }
+            else { double fees = 0;
+            return fees;    }
+            
+        }
         public override string ToString()
         {
             return base.ToString();
