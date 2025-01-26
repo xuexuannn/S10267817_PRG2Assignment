@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 // Student Name : Andrea Lim Shi Hui
 // Partner Name : Tan Xue Xuan
 //==========================================================
-namespace assignment
+namespace S10267254_PRG2Assignment
 {
     abstract class Flight : IComparable<Flight>
     {
@@ -28,25 +28,28 @@ namespace assignment
         }
         public virtual double CalculateFees()
         {
-            if (Destination== "Singapore (SIN)")
+            if (Destination == "Singapore (SIN)")
             {
                 double fees = 800;
                 if (Origin == "Dubai (DXB)" | Origin == "Bangkok (BKK)" | Origin == "Tokyo (NRT)")
                 {
-                    double discount = 25 + 50; 
+                    double discount = 25 + 50;
                     fees = fees - discount;
                     return fees;
                 }
                 return fees;
             }
-            else if (Origin=="Singapore (SIN)")
+            else if (Origin == "Singapore (SIN)")
             {
-                double fees = 1100-50;
+                double fees = 1100 - 50;
                 return fees;
             }
-            else { double fees = 0;
-            return fees;    }
-            
+            else
+            {
+                double fees = 0;
+                return fees;
+            }
+
         }
         public override string ToString()
         {
