@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//==========================================================
+// Student Number : S10267254
+// Student Name : Andrea Lim Shi Hui
+// Partner Name : Tan Xue Xuan
+//==========================================================
 namespace assignment
 {
     class BoardingGate
@@ -26,15 +30,15 @@ namespace assignment
         public double CalculateFees()
         {
             double baseFee = 300;
-            if (Flight is CFFTFlight && SupportsCFFT == true)
+            if (SupportsCFFT == true)
             {
                 baseFee += 150;
             }
-            else if (Flight is DDJBFlight && SupportsDDJB == true)
+            else if (SupportsDDJB == true)
             {
                 baseFee += 300;
             }
-            else if (Flight is LWTTFlight && SupportsLWTT == true)
+            else if (SupportsLWTT == true)
             {
                 baseFee += 500;
             }

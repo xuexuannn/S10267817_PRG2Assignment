@@ -1,6 +1,10 @@
 ﻿using assignment;
 using System.Runtime.ExceptionServices;
-
+//==========================================================
+// Student Number : S10267254
+// Student Name : Andrea Lim Shi Hui
+// Partner Name : Tan Xue Xuan
+//==========================================================
 Dictionary<string, Airline> airlineDict= new Dictionary<string, Airline>();
 //load airline.csv
 using (StreamReader sr = new StreamReader("airlines.csv"))

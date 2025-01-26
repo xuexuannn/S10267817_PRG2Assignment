@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//==========================================================
+// Student Number : S10267254
+// Student Name : Andrea Lim Shi Hui
+// Partner Name : Tan Xue Xuan
+//==========================================================
 namespace assignment
 {
     class Terminal
@@ -23,19 +27,19 @@ namespace assignment
         {
             if (Airlines.ContainsKey(airline.Code))
             {
-                Airlines[airline.Code] = airline;
-                return true;
+                return false;
             }
-            return false;
+            Airlines[airline.Code] = airline;
+            return true;
         }
         public bool AddBoardingGate(BoardingGate boardGate)
         {
             if (BoardingGates.ContainsKey(boardGate.GateName))
             {
-                BoardingGates[boardGate.GateName] = boardGate;
-                return true;
+                return false;
             }
-            return false;
+            BoardingGates[boardGate.GateName] = boardGate;
+            return true;
         }
         public Airline GetAirlineFromFlight(Flight flight)
         {
@@ -52,7 +56,7 @@ namespace assignment
         {
             foreach (Airline airline in Airlines.Values)
             {
-                Console.WriteLine($"{airline.Code}: {airline.CalculateFees()}");
+                Console.WriteLine($"{airline.Code}: ${airline.CalculateFees()}");
             }
         }
         public override string ToString()

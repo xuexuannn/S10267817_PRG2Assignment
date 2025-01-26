@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//==========================================================
+// Student Number : S10267254
+// Student Name : Andrea Lim Shi Hui
+// Partner Name : Tan Xue Xuan
+//==========================================================
 namespace assignment
 {
     abstract class Flight : IComparable<Flight>
@@ -27,7 +31,7 @@ namespace assignment
             if (Destination== "Singapore (SIN)")
             {
                 double fees = 800;
-                if (Origin == "Dubai(DXB)" | Origin == "Bangkok (BKK)" | Origin == "Tokyo (NRT)")
+                if (Origin == "Dubai (DXB)" | Origin == "Bangkok (BKK)" | Origin == "Tokyo (NRT)")
                 {
                     double discount = 25 + 50; 
                     fees = fees - discount;
@@ -46,7 +50,7 @@ namespace assignment
         }
         public override string ToString()
         {
-            return base.ToString();
+            return $"Flight Number: {FlightNumber},Origin: {Origin},Destination: {Destination},Expected Time: {ExpectedTime.ToString("hh:mm tt")}";
         }
         public int CompareTo(Flight flight)
         {

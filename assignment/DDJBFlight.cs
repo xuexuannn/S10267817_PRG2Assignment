@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//==========================================================
+// Student Number : S10267254
+// Student Name : Andrea Lim Shi Hui
+// Partner Name : Tan Xue Xuan
+//==========================================================
 namespace assignment
 {
     class DDJBFlight : Flight
@@ -28,6 +32,10 @@ namespace assignment
                 double fees = 300 + RequestFee;
                 return fees;
             }
+        }
+        public override string ToString()
+        {
+            return base.ToString() + $"Request Fee: {RequestFee}";
         }
     }
 }
