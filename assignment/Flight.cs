@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace assignment
 {
-    abstract class Flight
+    abstract class Flight : IComparable<Flight>
     {
         public string FlightNumber { get; set; }
         public string Origin { get; set; }
@@ -22,7 +22,7 @@ namespace assignment
             ExpectedTime = expectedTime;
             Status = "Scheduled";
         }
-        public double CalculateFees()
+        public virtual double CalculateFees()
         {
             if (Destination== "Singapore (SIN)")
             {
@@ -47,6 +47,10 @@ namespace assignment
         public override string ToString()
         {
             return base.ToString();
+        }
+        public int CompareTo(Flight flight)
+        {
+            return ExpectedTime.CompareTo(flight.ExpectedTime);
         }
     }
 }

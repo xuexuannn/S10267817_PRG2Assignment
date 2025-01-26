@@ -193,7 +193,10 @@ void AssignBoardingGate()
             break;
         }
     }
+    // assign flight to the boarding gate
     selectedBoardingGate.Flight = selectedFlight;
+    //update the boarding gate dict
+    boardingGateDict[selectedBoardingGate.GateName] = selectedBoardingGate;
 
     Console.WriteLine($"Support DDJB: {selectedBoardingGate.SupportsDDJB}");
     Console.WriteLine($"Support CFFT: {selectedBoardingGate.SupportsCFFT}");
@@ -232,6 +235,77 @@ void AssignBoardingGate()
 }
 AssignBoardingGate();
 
+
+//feature 6
+void CreateFlight()
+{
+    while (true)
+    {
+        Console.Write("Enter Flight Number: ");
+        string number = Console.ReadLine();
+        Console.Write("Enter Origin: ");
+        string origin = Console.ReadLine();
+        Console.Write("Enter Destination: ");
+        string destination = Console.ReadLine();
+        Console.Write("Enter Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+        string stringTime = Console.ReadLine();
+        try
+        {
+            DateTime dateTime = DateTime.ParseExact(stringTime, "dd/mm/yyyy hh:mm", null);
+            Console.Write("Enter Special Request Code (CFFT/DDJB/LWTT/None): ");
+            string code = Console.ReadLine().ToUpper();
+            Flight newFlight = null;
+            if (code == "CFFT")
+            {
+                newFlight = new CFFTFlight(number, origin, destination, dateTime);
+            }
+            else if (code == "DDJB")
+            {
+                newFlight = new DDJBFlight(number, origin, destination, dateTime);
+            }
+            else if (code == "LWTT")
+            {
+                newFlight = new LWTTFlight(number, origin, destination, dateTime);
+            }
+            else if (code == "NONE")
+            {
+                newFlight = new NORMFlight(number, origin, destination, dateTime);
+                code = "";
+            }
+            else
+            {
+                Console.WriteLine("Invalid Special Request Code.");
+                continue;
+            }
+            if (newFlight != null)
+            {
+                flightDict[number] = newFlight;
+                using (StreamWriter sw = new StreamWriter("flights.csv", true))
+                {
+                    sw.WriteLine($"{number},{origin},{destination},{dateTime:hh:mm tt},{code}");
+                }
+                Console.WriteLine($"Flight {number} has been added!");
+            }
+            Console.Write("Would you like to add another flight? (Y/N): ");
+            string answer = Console.ReadLine().Trim().ToUpper();
+
+            if (answer == "N")
+            {
+                break;
+            }
+
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("The date format is invalid. Please provide the date in the format dd/mm/yyyy hh:mm");
+            return;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occured: {ex.Message}");
+        }
+    }
+}
 
 void DisplayAirlines()
 {
@@ -340,4 +414,19 @@ else if (option == "2")
     {
         Console.WriteLine("Deletion cancelled.");
     }
+}
+
+//feature 9
+void DisplayFlightSchedule()
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Flight Schedule for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-24}{"Origin",-24}{"Destination",-24}{"Expected Departure/Arrival Time",-24}{"Status",-24}{"Boarding Gate"}");
+    List<Flight> flightList = new List<Flight>();
+    foreach (KeyValuePair<string,Flight> kvp in flightDict)
+    {
+        flightList.Add(kvp.Value);
+    }
+    flightList.Sort();
 }
