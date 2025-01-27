@@ -336,13 +336,13 @@ void DisplayDetails()
     Console.WriteLine($"List of FLights for {airlineDict[aircode].Name}");
     Console.WriteLine("=============================================");
     List<Flight> listflights = new List<Flight>();
-    Console.WriteLine($"{"Flight Number",-15}{"Origin",-21}{"Destination",-14}");
+    Console.WriteLine($"{"Flight Number",-15}{"Origin",-20}{"Destination"}");
     foreach (var flight in flightDict.Values)
     {
         if (flight.FlightNumber.StartsWith(aircode))
         {
             listflights.Add(flight);
-            Console.WriteLine($"{flight.FlightNumber,-15} {flight.Origin,-8}  {flight.Destination,-14}");
+            Console.WriteLine($"{flight.FlightNumber,-14} {flight.Origin,-18}  {flight.Destination}");
         }
     }
     Console.Write("\nEnter a Flight Number: ");
@@ -351,6 +351,7 @@ void DisplayDetails()
     Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-21}{"Origin",-20}{"Destination",-20}{"Expected Departure/Arrival Time"}");
     Console.WriteLine($"{selectedFlight.FlightNumber,-15}{airlineDict[aircode].Name,-21}{selectedFlight.Origin,-20}{selectedFlight.Destination,-20}{selectedFlight.ExpectedTime}");
 }
+DisplayDetails();
 //feature 8
 void ModifyFlight()
 {
