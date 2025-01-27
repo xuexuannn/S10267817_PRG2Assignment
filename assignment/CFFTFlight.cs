@@ -16,21 +16,22 @@ namespace assignment
         public CFFTFlight(string flightNumber, string origin, string destination, DateTime expectedTime) : base(flightNumber, origin, destination, expectedTime) { }
         public override double CalculateFees()
         {
-            if (Origin == "Singapore (SIN)")
-            {
-                double fees = 800 + 300 + RequestFee;
-                return fees;
-            }
-            else if (Destination == "Singapore (SIN)")
-            {
-                double fees = 500 + 300 + RequestFee;
-                return fees;
-            }
-            else
-            {
-                double fees = 300 + RequestFee;
-                return fees;
-            }
+            //if (Origin == "Singapore (SIN)")
+            //{
+            //    double fees = 800 + 300 + RequestFee;
+            //    return fees;
+            //}
+            //else if (Destination == "Singapore (SIN)")
+            //{
+            //    double fees = 500 + 300 + RequestFee;
+            //    return fees;
+            //}
+            //else
+            //{
+            //    double fees = 300 + RequestFee;
+            //    return fees;
+            //}
+            return base.CalculateFees() + RequestFee;
         }
         public override string ToString()
         {

@@ -17,21 +17,22 @@ namespace assignment
 
         public override double CalculateFees()
         {
-            if (Origin == "Singapore (SIN)")
-            {
-                double fees = 800 + 300 + RequestFee;
-                return fees;
-            }
-            else if (Destination == "Singapore (SIN)")
-            {
-                double fees = 500 + 300 + RequestFee;
-                return fees;
-            }
-            else
-            {
-                double fees = 300 + RequestFee;
-                return fees;
-            }
+            //if (Origin == "Singapore (SIN)")
+            //{
+            //    double fees = 800 + 300 + RequestFee;
+            //    return fees;
+            //}
+            //else if (Destination == "Singapore (SIN)")
+            //{
+            //    double fees = 500 + 300 + RequestFee;
+            //    return fees;
+            //}
+            //else
+            //{
+            //    double fees = 300 + RequestFee;
+            //    return fees;
+            //}
+            return base.CalculateFees() + RequestFee;
         }
         public override string ToString()
         {

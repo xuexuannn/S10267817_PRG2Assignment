@@ -1,12 +1,14 @@
 ﻿using assignment;
+using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 //==========================================================
 // Student Number : S10267254
 // Student Name : Andrea Lim Shi Hui
 // Partner Name : Tan Xue Xuan
 //==========================================================
+
+//Feature 1
 Dictionary<string, Airline> airlineDict= new Dictionary<string, Airline>();
-//load airline.csv
 using (StreamReader sr = new StreamReader("airlines.csv"))
 {
     string? s = sr.ReadLine(); // read the heading
@@ -237,7 +239,7 @@ void AssignBoardingGate()
     }
     Console.WriteLine($"Flight {selectedFlight.FlightNumber} has been assigned to Boarding Gate {selectedBoardingGate.GateName}!");
 }
-AssignBoardingGate();
+//AssignBoardingGate();
 
 
 //feature 6
@@ -324,101 +326,178 @@ void DisplayAirlines()
 }
 
 //feature 7 
-DisplayAirlines();
-Console.Write("Enter the 2-Letter Airline Code : ");
-string aircode = Console.ReadLine()?.Trim().ToUpper();
-
-Console.WriteLine("=============================================");
-Console.WriteLine($"List of FLights for {airlineDict[aircode].Name}");
-Console.WriteLine("=============================================");
-List<Flight> listflights = new List<Flight>();
-Console.WriteLine($"{"Flight Number",-15}{"Origin",-21}{"Destination",-14}");
-foreach (var flight in flightDict.Values)
+void DisplayFlightDetails()
 {
-    if (flight.FlightNumber.StartsWith(aircode))
+    DisplayAirlines();
+    Console.Write("Enter the 2-Letter Airline Code : ");
+    string aircode = Console.ReadLine()?.Trim().ToUpper();
+
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"List of FLights for {airlineDict[aircode].Name}");
+    Console.WriteLine("=============================================");
+    List<Flight> listflights = new List<Flight>();
+    Console.WriteLine($"{"Flight Number",-15}{"Origin",-21}{"Destination",-14}");
+    foreach (var flight in flightDict.Values)
     {
-        listflights.Add(flight);
-        Console.WriteLine($"{flight.FlightNumber,-15} {flight.Origin,-8}  {flight.Destination,-14}");
+        if (flight.FlightNumber.StartsWith(aircode))
+        {
+            listflights.Add(flight);
+            Console.WriteLine($"{flight.FlightNumber,-15} {flight.Origin,-8}  {flight.Destination,-14}");
+        }
     }
+    Console.Write("\nEnter a Flight Number: ");
+    string searchNumber = Console.ReadLine()?.Trim().ToUpper();
+    Flight selectedFlight = listflights.Find(f => f.FlightNumber == searchNumber);
+    Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-21}{"Origin",-20}{"Destination",-20}{"Expected Departure/Arrival Time"}");
+    Console.WriteLine($"{selectedFlight.FlightNumber,-15}{airlineDict[aircode].Name,-21}{selectedFlight.Origin,-20}{selectedFlight.Destination,-20}{selectedFlight.ExpectedTime}");
 }
-Console.Write("\nEnter a Flight Number: ");
-string searchNumber = Console.ReadLine()?.Trim().ToUpper();
-Flight selectedFlight = listflights.Find(f => f.FlightNumber == searchNumber);
-Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-21}{"Origin",-20}{"Destination",-20}{"Expected Departure/Arrival Time"}");
-Console.WriteLine($"{selectedFlight.FlightNumber,-15}{airlineDict[aircode].Name,-21}{selectedFlight.Origin,-20}{selectedFlight.Destination,-20}{selectedFlight.ExpectedTime}");
+
 
 //feature 8
-DisplayAirlines();
-Console.Write("Enter the 2-Letter Airline Code : ");
-string airlinecodes = Console.ReadLine()?.Trim().ToUpper();
-Console.WriteLine("=============================================");
-Console.WriteLine($"List of FLights for {airlineDict[airlinecodes].Name}");
-Console.WriteLine("=============================================");
-List<Flight> flightlist = new List<Flight>();
-Console.WriteLine($"{"Flight Number",-15}{"Origin",-21}{"Destination",-14}");
-foreach (var flight in flightDict.Values)
+void ModifyDetails()
 {
-    if (flight.FlightNumber.StartsWith(airlinecodes))
+    string newGate = null;
+    DisplayAirlines();
+    Console.Write("Enter the 2-Letter Airline Code : ");
+    string airlinecodes = Console.ReadLine()?.Trim().ToUpper();
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"List of FLights for {airlineDict[airlinecodes].Name}");
+    Console.WriteLine("=============================================");
+    List<Flight> flightlist = new List<Flight>();
+    Console.WriteLine($"{"Flight Number",-15}{"Origin",-21}{"Destination",-14}");
+    foreach (var flight in flightDict.Values)
     {
-        flightlist.Add(flight);
-        Console.WriteLine($"{flight.FlightNumber,-15} {flight.Origin,-8}  {flight.Destination,-14}");
+        if (flight.FlightNumber.StartsWith(airlinecodes))
+        {
+            flightlist.Add(flight); // add printed flights into list
+            Console.WriteLine($"{flight.FlightNumber,-15} {flight.Origin,-8}  {flight.Destination,-14}");
+        }
+    }
+
+    Console.WriteLine("Choose an existing Flight to modify or delete: ");
+    string editflight = Console.ReadLine()?.Trim().ToUpper();
+
+    if (flightDict.ContainsKey(editflight))
+    {
+        var flightToModify = flightDict[editflight]; // Access directly since key exists
+
+        Console.WriteLine("1. Modify Flight");
+        Console.WriteLine("2. Delete Flight");
+        Console.Write("Choose an option: ");
+        string option = Console.ReadLine();
+        if (option == "1")
+        {
+            Console.WriteLine("1. Modify Basic Information");
+            Console.WriteLine("2. Modify Status");
+            Console.WriteLine("3. Modify Special Request Code");
+            Console.WriteLine("4. Modify Boarding Gate");
+            Console.Write("Choose an option: ");
+            string nextoption = Console.ReadLine();
+
+            if (nextoption == "1")
+            {
+                Console.Write("Enter new Origin: ");
+                string newOrigin = Console.ReadLine()?.Trim();
+                flightToModify.Origin = newOrigin;
+
+                Console.Write("Enter new Destination: ");
+                string newDest = Console.ReadLine()?.Trim();
+                flightToModify.Destination = newDest;
+
+                Console.Write("Enter new Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+                DateTime newTime = DateTime.Parse(Console.ReadLine()?.Trim()!);
+                flightToModify.ExpectedTime = newTime;
+
+            }
+            else if (nextoption == "2")
+            {
+                Console.Write("Enter a new status: ");
+                flightToModify.Status = Console.ReadLine()?.Trim();
+                
+            }
+            else if (nextoption == "3")
+            {
+                Console.Write("Enter new special request code: ");
+                string newCode = Console.ReadLine()?.Trim();
+
+                if (newCode == "DDJB")
+                {
+                    flightToModify = new DDJBFlight(flightToModify.FlightNumber, flightToModify.Origin, flightToModify.Destination, flightToModify.ExpectedTime);
+                }
+                else if (newCode == "CFFT")
+                {
+                    flightToModify = new CFFTFlight(flightToModify.FlightNumber, flightToModify.Origin, flightToModify.Destination, flightToModify.ExpectedTime);
+                }
+                else if (newCode == "LWTT")
+                {
+                    flightToModify = new LWTTFlight(flightToModify.FlightNumber, flightToModify.Origin, flightToModify.Destination, flightToModify.ExpectedTime);
+                }
+                else
+                {
+                    flightToModify = new NORMFlight(flightToModify.FlightNumber, flightToModify.Origin, flightToModify.Destination, flightToModify.ExpectedTime);
+                }
+
+                flightDict[flightToModify.FlightNumber] = flightToModify; // Update in the dictionary
+             
+            }
+            else if (nextoption == "4")
+            {
+                Console.Write("Enter new boarding gate: ");
+                newGate = Console.ReadLine()?.Trim();
+
+            }
+
+            // Reflect changes in the dictionary
+            flightDict[flightToModify.FlightNumber] = flightToModify;
+
+            // Display updated flight details
+            Console.WriteLine("\nModified Flight Details:");
+            Console.WriteLine($"Flight Number: {flightToModify.FlightNumber}");
+            Console.WriteLine($"Origin: {flightToModify.Origin}");
+            Console.WriteLine($"Destination: {flightToModify.Destination}");
+            Console.WriteLine($"Expected Time: {flightToModify.ExpectedTime}");
+            Console.WriteLine($"Status: {flightToModify.Status}");
+            Console.WriteLine($"Special Request Code: {flightToModify.GetType().Name}");
+            if (boardingGateDict[newGate] == null)
+            {
+                Console.WriteLine("Boarding Gate: Unassigned");
+            }
+            else
+            {
+                BoardingGate modifiedGate = boardingGateDict[newGate];
+                Console.WriteLine($"Boarding Gate: {modifiedGate.GateName}");
+            }
+            
+        }
+
+        else if (option == "2")
+        {
+            // Delete Flight
+            Console.Write("Enter the Flight Number to delete: ");
+            string deleteflight = Console.ReadLine()?.Trim();
+
+
+            Console.Write($"Are you sure you want to delete {editflight}? [Y/N]: ");
+            string confirm = Console.ReadLine()?.Trim().ToUpper();
+
+            if (confirm == "Y")
+            {
+                flightDict.Remove(editflight);
+                Console.WriteLine("Flight deleted successfully.");
+            }
+            else if (confirm == "N")
+            {
+                Console.WriteLine("Deletion cancelled.");
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input. ");
+            }
+        }
     }
 }
-Console.WriteLine("Choose an existing Flight to modify or delete: ");
-string editflight = Console.ReadLine()?.Trim().ToUpper();
-var flightToModify = flightlist.Find(f => f.FlightNumber == editflight);
-Console.WriteLine("1. Modify Flight");
-Console.WriteLine("2. Delete Flight");
-Console.Write("Choose an option: ");
-string option = Console.ReadLine();
-if (option == "1")
-{
-    Console.WriteLine("1.Modify Basic Information");
-    Console.WriteLine("2. Modify Status");
-    Console.WriteLine("3. Modify Special Request Code");
-    Console.WriteLine("4. Modify Boarding Gate");
-    Console.Write("Choose an option: ");
-    string nextoption = Console.ReadLine();
-    if (nextoption == "1")
-    {
-        Console.Write("Enter new Origin: ");
-        string newOrigin = Console.ReadLine()?.Trim();
-        flightToModify.Origin = newOrigin;
-        Console.Write("Enter new Destination: ");
-        string newDest = Console.ReadLine()?.Trim();
-        flightToModify.Destination = newDest;
-        Console.Write("Enter new Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
-        DateTime newTime = Convert.ToDateTime(Console.ReadLine);
-        flightToModify.ExpectedTime = newTime;
-    }
-    else if (nextoption == "2")
-    {
-        Console.WriteLine("Enter a new status: ");
-        flightToModify.Status = Console.ReadLine()?.Trim();
 
-    }
 
-}
-else if (option == "2")
-{
-    // Delete Flight
-    Console.Write("Enter the Flight Number to delete: ");
-    string deleteflight = Console.ReadLine()?.Trim();
-
-    var flightToDelete = flightlist.Find(f => f.FlightNumber == deleteflight);
-    Console.Write($"Are you sure you want to delete {flightToDelete.FlightNumber}? [Y/N]: ");
-    string confirm = Console.ReadLine()?.Trim().ToUpper();
-
-    if (confirm == "Y")
-    {
-        flightDict.Remove(flightToDelete.FlightNumber);
-        Console.WriteLine("Flight deleted successfully.");
-    }
-    else
-    {
-        Console.WriteLine("Deletion cancelled.");
-    }
-}
 
 //feature 9
 void DisplayFlightSchedule()
@@ -434,3 +513,68 @@ void DisplayFlightSchedule()
     }
     flightList.Sort();
 }
+
+//Advanced Feature 2
+//void CalculateAirlineFees()
+//{
+//    // Check if flights list is null or empty
+//    //if (flights == null || flights.Count == 0)
+//    //{
+//    //    Console.WriteLine("No flights available to process.");
+//    //    return;
+//    //}
+
+//    //// Check if all flights have boarding gates assigned
+//    //foreach (var flight in flightDict)
+//    //{
+//    //    if (!gates.Any(gate => gate.Flight == flight))
+//    //    {
+//    //        Console.WriteLine($"Flight {flight.FlightNumber} does not have a boarding gate assigned. Please assign all boarding gates before proceeding.");
+//    //        return;
+//    //    }
+//    //}
+
+//    // Calculate fees and discounts
+
+//    double totalFees = 0, totalDiscounts = 0;
+
+//    Console.WriteLine("Airline Fee Summary:");
+//    foreach (Flight flight in flightDict.Values)
+//    {
+//        double fees = flight.CalculateFees();
+
+//        // Apply promotional discounts
+//        double discount = 0;
+//        if (flight.Origin == "Dubai (DXB)" || flight.Origin == "Bangkok (BKK)" || flight.Origin == "Tokyo (NRT)")
+//        {
+//            discount += 25;
+//        }
+//        if(flight.ExpectedTime.Hour > 11 || flight.ExpectedTime.Hour < 9)
+//        {
+//            discount += 110;
+//        }
+//        Airline airline = new Airline();
+//        airline.CalculateFees();
+        
+
+//        double finalFee = fees - discount;
+//        totalFees += fees;
+//        totalDiscounts += discount;
+
+//        Console.WriteLine($"  Flight: {flight.FlightNumber}");
+//        Console.WriteLine($"  Subtotal Fees: {fees:C}");
+//        Console.WriteLine($"  Discounts: {discount:C}");
+//        Console.WriteLine($"  Final Total: {finalFee:C}");
+//    }
+
+//    Console.WriteLine("\nOverall Summary:");
+//    Console.WriteLine($"  Total Fees: {totalFees:C}");
+//    Console.WriteLine($"  Total Discounts: {totalDiscounts:C}");
+//    Console.WriteLine($"  Net Total: {totalFees - totalDiscounts:C}");
+//}
+//CalculateAirlineFees();
+
+
+
+
+

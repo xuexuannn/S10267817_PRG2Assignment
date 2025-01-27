@@ -26,28 +26,42 @@ namespace assignment
             ExpectedTime = expectedTime;
             Status = "Scheduled";
         }
+        //public virtual double CalculateFees()
+        //{
+        //    if (Destination== "Singapore (SIN)")
+        //    {
+        //        double fees = 800;
+        //        if (Origin == "Dubai (DXB)" | Origin == "Bangkok (BKK)" | Origin == "Tokyo (NRT)")
+        //        {
+        //            double discount = 25 + 50; 
+        //            fees = fees - discount;
+        //            return fees;
+        //        }
+        //        return fees;
+        //    }
+        //    else if (Origin=="Singapore (SIN)")
+        //    {
+        //        double fees = 1100-50;
+        //        return fees;
+        //    }
+        //    else { double fees = 0;
+        //    return fees;    }
+
+        //}
         public virtual double CalculateFees()
         {
-            if (Destination== "Singapore (SIN)")
+            double fees = 300; // Base Boarding Gate Fee
+            if (Origin == "Singapore (SIN)")
             {
-                double fees = 800;
-                if (Origin == "Dubai (DXB)" | Origin == "Bangkok (BKK)" | Origin == "Tokyo (NRT)")
-                {
-                    double discount = 25 + 50; 
-                    fees = fees - discount;
-                    return fees;
-                }
-                return fees;
+                fees += 800;
             }
-            else if (Origin=="Singapore (SIN)")
+            else if (Destination == "Singapore (SIN)")
             {
-                double fees = 1100-50;
-                return fees;
+                fees += 500;
             }
-            else { double fees = 0;
-            return fees;    }
-            
+            return fees;
         }
+
         public override string ToString()
         {
             return $"Flight Number: {FlightNumber},Origin: {Origin},Destination: {Destination},Expected Time: {ExpectedTime.ToString("hh:mm tt")}";
