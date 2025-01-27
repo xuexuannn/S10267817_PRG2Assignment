@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 // Student Name : Andrea Lim Shi Hui
 // Partner Name : Tan Xue Xuan
 //==========================================================
-namespace assignment
+namespace S10267254_PRG2Assignment
 {
     class NORMFlight : Flight
     {

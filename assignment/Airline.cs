@@ -1,5 +1,4 @@
-﻿using assignment;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 // Student Name : Andrea Lim Shi Hui
 // Partner Name : Tan Xue Xuan
 //==========================================================
-namespace assignment
+namespace S10267254_PRG2Assignment
 {
     class Airline
     {
@@ -56,13 +55,13 @@ namespace assignment
             {
                 discount = totalFee * 0.03;
             }
-            double threeFlightDiscount = (Flights.Count / 3) * 350;
+            double threeFlightDiscount = Flights.Count / 3 * 350;
             totalFee -= discount;
             totalFee -= secondDiscount;
-            totalFee-=threeFlightDiscount;
+            totalFee -= threeFlightDiscount;
             return totalFee;
         }
-            
+
         public bool RemoveFlight(Flight flight)
         {
             if (Flights.ContainsKey(flight.FlightNumber))
