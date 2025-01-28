@@ -342,7 +342,7 @@ void DisplayDetails()
         if (flight.FlightNumber.StartsWith(aircode))
         {
             listflights.Add(flight);
-            Console.WriteLine($"{flight.FlightNumber,-14} {flight.Origin,-18}  {flight.Destination}");
+            Console.WriteLine($"{flight.FlightNumber,-14} {flight.Origin,-18}  {flight.Destination}{flight.ExpectedTime}");
         }
     }
     Console.Write("\nEnter a Flight Number: ");
@@ -351,7 +351,8 @@ void DisplayDetails()
     Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-21}{"Origin",-20}{"Destination",-20}{"Expected Departure/Arrival Time"}");
     Console.WriteLine($"{selectedFlight.FlightNumber,-15}{airlineDict[aircode].Name,-21}{selectedFlight.Origin,-20}{selectedFlight.Destination,-20}{selectedFlight.ExpectedTime}");
 }
-DisplayDetails();
+//DisplayDetails();
+
 //feature 8
 void ModifyFlight()
 {
@@ -499,3 +500,90 @@ void ModifyFlight()
         }
         flightList.Sort();
     }
+
+//Advanced Feature 2
+void CheckGatesAssigned()
+{
+    var unassignedFlights = boardingGateDict.Values.Where(g => g.Flight == null).ToList();
+    if (unassignedFlights.Count > 0)
+    {
+        Console.WriteLine("The following boarding gates have no assigned flights:");
+        foreach (var gate in unassignedFlights)
+        {
+            Console.WriteLine($"Gate: {gate.GateName}");
+        }
+        Console.WriteLine("Please ensure all flights are assigned before proceeding.");
+        return;
+    }
+}
+    void CalculateTotalFee()
+{
+
+    double totalAirlineFees = 0;
+    double totalAirlineDiscounts = 0;
+
+    foreach (var airline in airlineDict.Values)
+    {
+        Console.WriteLine($"Airline: {airline.Name} ({airline.Code})");
+
+        double airlineFees = 0;
+        double airlineDiscounts = 0;
+
+        // Retrieve flights for this airline
+        var airlineFlights = flightDict.Values.Where(f => f.FlightNumber.StartsWith(airline.Code));
+
+        foreach (var flight in airlineFlights)
+        {
+            airlineFees = flight.CalculateFees();
+
+            // Discounts based on promotional conditions
+            if (flight.ExpectedTime.Hour < 11 || flight.ExpectedTime.Hour > 21)
+            {
+                airlineDiscounts += 110;
+                Console.WriteLine("hour");
+            }
+            if (flight.Origin == "Dubai (DXB)" || flight.Origin == "Bangkok (BKK)" || flight.Origin == "Tokyo (NRT)")
+            {
+                airlineDiscounts += 25;
+                Console.WriteLine("origin");
+            }
+            if (flight is NORMFlight)
+            {
+                airlineDiscounts += 50;
+                Console.WriteLine("norm");
+            }
+        }
+
+        // Additional airline-level discounts
+        int flightCount = airlineFlights.Count();
+        if (flightCount >= 3)
+        {
+            airlineDiscounts += (flightCount / 3) * 350;
+            Console.WriteLine("3times");
+        }
+        if (flightCount > 5)
+        {
+            airlineDiscounts += airlineFees * 0.03;
+            Console.WriteLine("more than 5");
+        }
+
+        double finalFees = airlineFees - airlineDiscounts;
+
+        Console.WriteLine($"  Original Subtotal : ${airlineFees:F2}");
+        Console.WriteLine($"  Subtotal of Discounts: -${airlineDiscounts:F2}");
+        Console.WriteLine($"  Total Final Fee: ${finalFees:F2}\n");
+
+        totalAirlineFees += airlineFees;
+        totalAirlineDiscounts += airlineDiscounts;
+    }
+
+    double finalTotalFees = totalAirlineFees - totalAirlineDiscounts;
+
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"Subtotal of All Airlines: ${totalAirlineFees:F2}");
+    Console.WriteLine($"Subtotal Discounts of All Airlines): ${totalAirlineDiscounts:F2}");
+    Console.WriteLine($"Final Total Fees Collected: ${finalTotalFees:F2}");
+    Console.WriteLine($"Percentage of Discount: {((totalAirlineDiscounts / totalAirlineFees) * 100):F2}%");
+
+}
+
