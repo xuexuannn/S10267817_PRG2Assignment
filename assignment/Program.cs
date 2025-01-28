@@ -7,8 +7,24 @@ using System.Runtime.ExceptionServices;
 // Student Name : Andrea Lim Shi Hui
 // Partner Name : Tan Xue Xuan
 //==========================================================
+void MainMenu()
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Welcome to Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine("1. List All Flights");
+    Console.WriteLine("2. List Boarding Gates");
+    Console.WriteLine("3. Assign a Boarding Gate to a Flight");
+    Console.WriteLine("4. Create Flight");
+    Console.WriteLine("5. Display Airline Flights");
+    Console.WriteLine("6. Modify Flight Details");
+    Console.WriteLine("7. Display Flight Schedule");
+    Console.WriteLine("0. Exit");
+    Console.WriteLine();
+}
+
+//Feature 1
 Dictionary<string, Airline> airlineDict= new Dictionary<string, Airline>();
-//load airline.csv
 using (StreamReader sr = new StreamReader("airlines.csv"))
 {
     string? s = sr.ReadLine(); // read the heading
@@ -39,22 +55,6 @@ using (StreamReader sr = new StreamReader("boardinggates.csv"))
         boardingGateDict[gate] = boardingGate;
     }
 
-}
-void MainMenu()
-{
-    Console.WriteLine("=============================================");
-    Console.WriteLine("Welcome to Changi Airport Terminal 5");
-    Console.WriteLine("=============================================");
-    Console.WriteLine("1. List All Flights");
-    Console.WriteLine("2. List Boarding Gates");
-    Console.WriteLine("3. Assign a Boarding Gate to a Flight");
-    Console.WriteLine("4. Create Flight");
-    Console.WriteLine("5. Display Airline Flights");
-    Console.WriteLine("6. Modify Flight Details");
-    Console.WriteLine("7. Display Flight Schedule");
-    Console.WriteLine("0. Exit");
-    Console.WriteLine();
-    Console.WriteLine("Please select your option");
 }
 
 //Feature 2
@@ -587,3 +587,49 @@ void CheckGatesAssigned()
 
 }
 
+
+//Main Program Loop
+while(true)
+{
+    MainMenu();
+    Console.WriteLine("Please select your option");
+    int choice= Convert.ToInt32(Console.ReadLine());
+    if (choice==1)
+    {
+        DisplayFlight();
+    }
+    else if (choice==2)
+    {
+        DisplayGates();
+    }
+    else if (choice==3)
+    {
+        AssignBoardingGate();
+    }
+    else if (choice==4)
+    {
+        CreateFlight();
+    }
+    else if (choice==5)
+    {
+        DisplayDetails();
+    }
+    else if (choice==6)
+    {
+        ModifyFlight();
+    }
+    else if (choice==7)
+    {
+        DisplayFlightSchedule();
+    }
+    else if (choice==0)
+    {
+        Console.WriteLine("Bye-Bye!");
+        break;
+    }
+    else
+    {
+        Console.WriteLine("Invalid option. Try again! ");
+        continue;
+    }
+}
