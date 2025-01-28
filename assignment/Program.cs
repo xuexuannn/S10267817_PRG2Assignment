@@ -186,17 +186,19 @@ void AssignBoardingGate()
         if (!boardingGateDict.ContainsKey(boardingGate))
         {
             Console.WriteLine("Boarding Gate not found.");
-            return;
-        }
-        selectedBoardingGate = boardingGateDict[boardingGate];
-        if (selectedBoardingGate.Flight != null)
-        {
-            Console.WriteLine($"Boarding Gate {selectedBoardingGate} is already assigned to Flight {selectedBoardingGate.Flight.FlightNumber}");
-            Console.WriteLine("Please choose a different Boarding Gate.");
         }
         else
         {
-            break;
+            selectedBoardingGate = boardingGateDict[boardingGate];
+            if (selectedBoardingGate.Flight != null)
+            {
+                Console.WriteLine($"Boarding Gate {selectedBoardingGate.GateName} is already assigned to Flight {selectedBoardingGate.Flight.FlightNumber}");
+                Console.WriteLine("Please choose a different Boarding Gate.");
+            }
+            else
+            {
+                break;
+            }
         }
     }
     // assign flight to the boarding gate
@@ -239,7 +241,6 @@ void AssignBoardingGate()
     }
     Console.WriteLine($"Flight {selectedFlight.FlightNumber} has been assigned to Boarding Gate {selectedBoardingGate.GateName}!");
 }
-//AssignBoardingGate();
 
 
 //feature 6
@@ -288,7 +289,7 @@ void CreateFlight()
                 flightDict[number] = newFlight;
                 using (StreamWriter sw = new StreamWriter("flights.csv", true))
                 {
-                    sw.WriteLine($"{number},{origin},{destination},{dateTime:hh:mm tt},{code}");
+                    sw.WriteLine($"{number},{origin},{destination},{dateTime:dd/MM/yyyy hh:mm tt},{code}");
                 }
                 Console.WriteLine($"Flight {number} has been added!");
             }
@@ -486,20 +487,176 @@ void ModifyFlight()
         }
     }
 }
-    //feature 9
-    void DisplayFlightSchedule()
+//feature 9
+void DisplayFlightSchedule()
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Flight Schedule for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-24}{"Origin",-24}{"Destination",-24}{"Expected Departure/Arrival Time",-35}{"Status",-24}{"Boarding Gate",-24}{"Special Request"}");
+    List<Flight> flightList = new List<Flight>();
+    foreach (KeyValuePair<string, Flight> kvp in flightDict)
     {
-        Console.WriteLine("=============================================");
-        Console.WriteLine("Flight Schedule for Changi Airport Terminal 5");
-        Console.WriteLine("=============================================");
-        Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-24}{"Origin",-24}{"Destination",-24}{"Expected Departure/Arrival Time",-24}{"Status",-24}{"Boarding Gate"}");
-        List<Flight> flightList = new List<Flight>();
-        foreach (KeyValuePair<string, Flight> kvp in flightDict)
-        {
-            flightList.Add(kvp.Value);
-        }
-        flightList.Sort();
+        flightList.Add(kvp.Value);
     }
+    flightList.Sort();
+    foreach (Flight flight in flightList)
+    {
+        string boardinggate = "Unassigned";
+        string specialRequest = "None";
+        if (flight is DDJBFlight)
+        {
+            specialRequest = "DDJB";
+        }
+        else if (flight is CFFTFlight)
+        {
+            specialRequest = "CFFT";
+        }
+        else if (flight is LWTTFlight)
+        {
+            specialRequest = "LWWT";
+        }
+        foreach (KeyValuePair<string,BoardingGate> kvp in boardingGateDict)
+        {
+            if (kvp.Value.Flight != null && kvp.Value.Flight.FlightNumber == flight.FlightNumber)
+            {
+                boardinggate = kvp.Key;
+                break;
+            }
+        }
+        string airlinecode = flight.FlightNumber.Substring(0, 2);    //get the first two letters
+        string airlineName = "";
+        foreach (KeyValuePair<string, Airline> i in airlineDict)
+        {
+            if (i.Key == airlinecode)
+            {
+                airlineName = i.Value.Name;
+                break;
+            }
+        }
+        Console.WriteLine($"{flight.FlightNumber,-16}{airlineName,-24}{flight.Origin,-24}{flight.Destination,-24}{flight.ExpectedTime.ToString("dd/MM/yyyy hh:mm tt"),-35}{flight.Status,-24}{boardinggate,-24}{specialRequest}");
+    }
+}
+
+//Advanced feature 1
+void ProcessUnassignedFlights()
+{
+
+    Queue<Flight> unassignedFlights = new Queue<Flight>();
+    int totalUnassignedFlights = 0;
+    int totalUnassignedGates = 0;
+    //add and count unassigned flights
+    foreach (Flight flight in flightDict.Values)
+    {
+        bool assigned = false;
+        foreach (BoardingGate gate in boardingGateDict.Values)
+        {
+            if (gate.Flight != null && gate.Flight.FlightNumber == flight.FlightNumber)
+            {
+                assigned = true;
+                break;
+            }
+        }
+        if (assigned == false)
+        {
+            unassignedFlights.Enqueue(flight);
+            totalUnassignedFlights++;
+        }
+    }
+    //counting unassigned boarding gate
+    foreach (BoardingGate gate in boardingGateDict.Values )
+    {
+        if (gate.Flight == null)
+        {
+            totalUnassignedGates++;
+        }
+    }
+    Console.WriteLine($"Total unassigned flights: {totalUnassignedFlights}");
+    Console.WriteLine($"Total unassigned boarding gates: {totalUnassignedGates}");
+    int assignedFlight = 0;
+    int assignedGateCount = 0;
+    while (unassignedFlights.Count > 0)
+    {
+        Flight flights = unassignedFlights.Dequeue();
+        BoardingGate assignedGate = null;
+        string specialRequestCode = "None";
+        if (flights is DDJBFlight)
+        {
+            specialRequestCode = "DDJB";
+        }
+        else if (flights is CFFTFlight)
+        {
+            specialRequestCode = "CFFT";
+        }
+        else if (flights is LWTTFlight)
+        {
+            specialRequestCode = "LWTT";
+        }
+
+        foreach (BoardingGate gate in boardingGateDict.Values)
+        {
+            if (gate.Flight == null)
+            {
+                if (specialRequestCode=="DDJB" && gate.SupportsDDJB == true)
+                {
+                    assignedGate = gate;
+                    break;
+                }
+                else if (specialRequestCode == "CFFT" && gate.SupportsCFFT == true)
+                {
+                    assignedGate = gate;
+                    break;
+                }
+                else if (specialRequestCode == "LWTT" && gate.SupportsLWTT == true)
+                {
+                    assignedGate = gate;
+                    break;
+                }
+            }
+        }
+        //gate with no special code
+        if (assignedGate == null)
+        {
+            foreach (BoardingGate gate in boardingGateDict.Values)
+            {
+                if (gate.Flight == null)        // checking of gate available
+                {
+                    assignedGate = gate;
+                    break;
+                }
+            }
+        }
+        //assigning the flight to gates
+        if (assignedGate != null)
+        {
+            assignedGate.Flight = flights;
+            flights.Status = "On Time";
+            assignedFlight++;
+            assignedGateCount++;
+            Console.WriteLine($"Flight {flights.FlightNumber} assigned to Gate {assignedGate.GateName,-5} | Special Request: {specialRequestCode}");
+        }
+        else
+        {
+            Console.WriteLine($"No available gate for Flight {flights.FlightNumber}");
+        }
+    }
+    Console.WriteLine($"Total flights processed and assigned: {assignedFlight}");
+    Console.WriteLine($"Total gates processed and assigned: {assignedGateCount}");
+    double flightAssignRate = 0;
+    if (totalUnassignedFlights > 0)
+    {
+        flightAssignRate=((double)assignedFlight/totalUnassignedFlights)*100;
+    }
+
+    double gateAssignRate = 0;
+    if (totalUnassignedGates > 0)
+    {
+        gateAssignRate=((double)assignedGateCount/totalUnassignedGates)*100;
+    }
+    Console.WriteLine(assignedGateCount);
+    Console.WriteLine($"Percentage of flights automatically processed: {flightAssignRate:F2}%");
+    Console.WriteLine($"Percentage of gates automatically processed: {gateAssignRate:F2}%");
+}
 
 //Advanced Feature 2
 void CheckGatesAssigned()

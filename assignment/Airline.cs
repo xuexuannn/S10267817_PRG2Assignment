@@ -51,7 +51,7 @@ namespace S10267254_PRG2Assignment
                 }
             }
             double discount = 0;
-            if (Flights.Count > 0)
+            if (Flights.Count > 5)
             {
                 discount = totalFee * 0.03;
             }
