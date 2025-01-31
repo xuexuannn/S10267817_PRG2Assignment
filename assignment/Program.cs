@@ -28,6 +28,7 @@ void MainMenu()
 Dictionary<string, Airline> airlineDict= new Dictionary<string, Airline>();
 try
 {
+    Console.WriteLine("Loading Airlines...");
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
         string? s = sr.ReadLine(); // read the heading
@@ -41,6 +42,7 @@ try
             airlineDict[airlineCode] = airline;
         }
     }
+    Console.WriteLine("8 Airlines Loaded!");
 }
 catch (FileNotFoundException)
 {
@@ -54,6 +56,7 @@ catch (Exception ex)
 Dictionary<string, BoardingGate> boardingGateDict = new Dictionary<string, BoardingGate>();
 try
 {
+    Console.WriteLine("Loading Boarding Gates...");
     using (StreamReader sr = new StreamReader("boardinggates.csv"))
     {
         string? s = sr.ReadLine();
@@ -70,6 +73,7 @@ try
         }
 
     }
+    Console.WriteLine("66 Boarding Gates Loaded!");
 }
 catch (FileNotFoundException)
 {
@@ -84,6 +88,7 @@ catch (Exception ex)
 Dictionary<string,Flight> flightDict =new Dictionary<string,Flight>();
 try
 {
+    Console.WriteLine("Loading FLights...");
     using (StreamReader sr = new StreamReader("flights.csv"))
     {
         string s = sr.ReadLine();       //header
@@ -127,6 +132,7 @@ try
             }
         }
     }
+    Console.WriteLine("30 FLights Loaded!");
 }
 catch (FileNotFoundException)
 {
@@ -441,7 +447,7 @@ void DisplayDetails()
             if (flight.FlightNumber.StartsWith(aircode))
             {
                 listflights.Add(flight);
-                Console.WriteLine($"{flight.FlightNumber,-14} {flight.Origin,-18}  {flight.Destination}{flight.ExpectedTime}");
+                Console.WriteLine($"{flight.FlightNumber,-14} {flight.Origin,-18}  {flight.Destination}");
             }
         }
         Console.Write("\nEnter a Flight Number: ");
@@ -826,7 +832,7 @@ void CheckGatesAssigned()
         return;
     }
 }
-    void CalculateTotalFee()
+void CalculateTotalFee()
 {
 
     double totalAirlineFees = 0;
@@ -838,29 +844,36 @@ void CheckGatesAssigned()
 
         double airlineFees = 0;
         double airlineDiscounts = 0;
+        
 
         // Retrieve flights for this airline
         var airlineFlights = flightDict.Values.Where(f => f.FlightNumber.StartsWith(airline.Code));
 
         foreach (var flight in airlineFlights)
         {
-            airlineFees = flight.CalculateFees();
+            //calculate total fees needed for each airlines
+            
+            airlineFees += flight.CalculateFees();
+          
+
+           
+
 
             // Discounts based on promotional conditions
             if (flight.ExpectedTime.Hour < 11 || flight.ExpectedTime.Hour > 21)
             {
                 airlineDiscounts += 110;
-                Console.WriteLine("hour");
+                
             }
             if (flight.Origin == "Dubai (DXB)" || flight.Origin == "Bangkok (BKK)" || flight.Origin == "Tokyo (NRT)")
             {
                 airlineDiscounts += 25;
-                Console.WriteLine("origin");
+                
             }
             if (flight is NORMFlight)
             {
                 airlineDiscounts += 50;
-                Console.WriteLine("norm");
+                
             }
         }
 
@@ -869,18 +882,18 @@ void CheckGatesAssigned()
         if (flightCount >= 3)
         {
             airlineDiscounts += (flightCount / 3) * 350;
-            Console.WriteLine("3times");
+           
         }
         if (flightCount > 5)
         {
             airlineDiscounts += airlineFees * 0.03;
-            Console.WriteLine("more than 5");
+            
         }
 
         double finalFees = airlineFees - airlineDiscounts;
 
         Console.WriteLine($"  Original Subtotal : ${airlineFees:F2}");
-        Console.WriteLine($"  Subtotal of Discounts: -${airlineDiscounts:F2}");
+        Console.WriteLine($"  Subtotal of Discounts: ${airlineDiscounts:F2}");
         Console.WriteLine($"  Total Final Fee: ${finalFees:F2}\n");
 
         totalAirlineFees += airlineFees;
@@ -891,7 +904,7 @@ void CheckGatesAssigned()
 
     Console.WriteLine("=============================================");
     Console.WriteLine($"Subtotal of All Airlines: ${totalAirlineFees:F2}");
-    Console.WriteLine($"Subtotal Discounts of All Airlines): ${totalAirlineDiscounts:F2}");
+    Console.WriteLine($"Subtotal Discounts of All Airlines: ${totalAirlineDiscounts:F2}");
     Console.WriteLine($"Final Total Fees Collected: ${finalTotalFees:F2}");
     Console.WriteLine($"Percentage of Discount: {((totalAirlineDiscounts / totalAirlineFees) * 100):F2}%");
 
@@ -899,7 +912,7 @@ void CheckGatesAssigned()
 
 
 //Main Program Loop
-while(true)
+while (true)
 {
     try
     {
