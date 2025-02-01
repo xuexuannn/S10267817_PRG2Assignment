@@ -153,23 +153,30 @@ catch (Exception ex)
 //Feature 3
 void DisplayFlight()
 {
-    Console.WriteLine("=============================================");
-    Console.WriteLine("List of Flights for Changi Airport Terminal 5");
-    Console.WriteLine("=============================================");
-    Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-24}{"Origin",-24}{"Destination",-24}{"Expected Departure/Arrival Time"}");
-    foreach (KeyValuePair <string,Flight> kvp in flightDict)
+    try
     {
-        string airlinecode = kvp.Value.FlightNumber.Substring(0, 2);    //get the first two letters
-        string airlineName = "";
-        foreach (KeyValuePair<string,Airline> i in airlineDict)
+        Console.WriteLine("=============================================");
+        Console.WriteLine("List of Flights for Changi Airport Terminal 5");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Flight Number",-16}{"Airline Name",-24}{"Origin",-24}{"Destination",-24}{"Expected Departure/Arrival Time"}");
+        foreach (KeyValuePair<string, Flight> kvp in flightDict)
         {
-            if (i.Key == airlinecode)
+            string airlinecode = kvp.Value.FlightNumber.Substring(0, 2);    //get the first two letters
+            string airlineName = "";
+            foreach (KeyValuePair<string, Airline> i in airlineDict)
             {
-                airlineName = i.Value.Name;
-                break;
+                if (i.Key == airlinecode)
+                {
+                    airlineName = i.Value.Name;
+                    break;
+                }
             }
+            Console.WriteLine($"{kvp.Value.FlightNumber,-16}{airlineName,-24}{kvp.Value.Origin,-24}{kvp.Value.Destination,-24}{kvp.Value.ExpectedTime}");
         }
-        Console.WriteLine($"{kvp.Value.FlightNumber,-16}{airlineName,-24}{kvp.Value.Origin,-24}{kvp.Value.Destination,-24}{kvp.Value.ExpectedTime}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error Message: {ex.Message}");
     }
 }
 
@@ -308,7 +315,6 @@ void AssignBoardingGate()
     }
 }
 
-
 //feature 6
 void CreateFlight()
 {
@@ -392,7 +398,7 @@ void CreateFlight()
                 }
                 Console.WriteLine($"Flight {number} has been added!");
             }
-            Console.Write("Would you like to add another flight? (Y/N): ");
+            Console.WriteLine("Would you like to add another flight? (Y/N): ");
             string answer = Console.ReadLine().Trim().ToUpper();
 
             if (answer == "N")
