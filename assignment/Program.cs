@@ -29,6 +29,7 @@ Dictionary<string, Airline> airlineDict= new Dictionary<string, Airline>();
 try
 {
     Console.WriteLine("Loading Airlines...");
+    int count = 0;
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
         string? s = sr.ReadLine(); // read the heading
@@ -40,9 +41,10 @@ try
             string airlineCode = airinfo[1].Trim();
             Airline airline = new Airline(airlineName, airlineCode);
             airlineDict[airlineCode] = airline;
+            count++;
         }
     }
-    Console.WriteLine("8 Airlines Loaded!");
+    Console.WriteLine($"{count} Airlines Loaded!");
 }
 catch (FileNotFoundException)
 {
@@ -57,6 +59,7 @@ Dictionary<string, BoardingGate> boardingGateDict = new Dictionary<string, Board
 try
 {
     Console.WriteLine("Loading Boarding Gates...");
+    int boardCount = 0;
     using (StreamReader sr = new StreamReader("boardinggates.csv"))
     {
         string? s = sr.ReadLine();
@@ -70,10 +73,11 @@ try
             Flight flight = null;
             BoardingGate boardingGate = new BoardingGate(gate, ddjb, cfft, lwtt, flight);
             boardingGateDict[gate] = boardingGate;
+            boardCount++;
         }
 
     }
-    Console.WriteLine("66 Boarding Gates Loaded!");
+    Console.WriteLine($"{boardCount} Boarding Gates Loaded!");
 }
 catch (FileNotFoundException)
 {
@@ -89,6 +93,7 @@ Dictionary<string,Flight> flightDict =new Dictionary<string,Flight>();
 try
 {
     Console.WriteLine("Loading FLights...");
+    int flightCount = 0;
     using (StreamReader sr = new StreamReader("flights.csv"))
     {
         string s = sr.ReadLine();       //header
@@ -129,10 +134,11 @@ try
             else
             {
                 flightDict[flightNumber] = flight;
+                flightCount++;
             }
         }
     }
-    Console.WriteLine("30 FLights Loaded!");
+    Console.WriteLine($"{flightCount} FLights Loaded!");
 }
 catch (FileNotFoundException)
 {
