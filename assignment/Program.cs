@@ -20,6 +20,8 @@ void MainMenu()
     Console.WriteLine("5. Display Airline Flights");
     Console.WriteLine("6. Modify Flight Details");
     Console.WriteLine("7. Display Flight Schedule");
+    Console.WriteLine("8. Advanced Feature 1");
+    Console.WriteLine("9. Advanced Feature 2");
     Console.WriteLine("0. Exit");
     Console.WriteLine();
 }
@@ -952,6 +954,15 @@ while (true)
         else if (choice == 7)
         {
             DisplayFlightSchedule();
+        }
+        else if (choice==8)
+        {
+            ProcessUnassignedFlights();
+        }
+        else if (choice==9)
+        {
+            CheckGatesAssigned();
+            CalculateTotalFee();    
         }
         else if (choice == 0)
         {
